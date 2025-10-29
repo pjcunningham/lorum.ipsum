@@ -1,0 +1,16 @@
+<!-- favicon-pilcrow.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"
+     width="32" height="32" fill="none" role="img"
+     aria-label="Pilcrow favicon">
+    <title>Pilcrow favicon</title>
+    <g fill="currentColor">
+        <!-- top bar -->
+        <rect x="88" y="56" width="112" height="22" rx="11"/>
+        <!-- left stem -->
+        <rect x="88" y="56" width="26" height="148" rx="8"/>
+        <!-- right stem -->
+        <rect x="174" y="56" width="26" height="148" rx="8"/>
+        <!-- mirrored bowl, aligned with top bar -->
+        <path d="M114 56H84C58 56 44 71 44 88C44 105 58 120 84 120H114Z"/>
+    </g>
+</svg>
