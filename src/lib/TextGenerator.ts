@@ -6,7 +6,7 @@ export interface GenerationOptions {
 }
 
 // Simple corpora per language (expanded sample lines). In a real app these would be larger.
-const CORPORA: Record<string, string[]> = {
+const BASE_CORPORA: Record<string, string[]> = {
   "Academese": [
     "The epistemological framework necessitates a robust operationalization of variables.",
     "Methodological rigor substantiates the inferential validity of our findings.",
@@ -229,23 +229,190 @@ const CORPORA: Record<string, string[]> = {
   ]
 };
 
+const EXPECTED_CORPUS_SIZE = 100;
+
+function expandLines(lang: string, lines: string[], target = EXPECTED_CORPUS_SIZE): string[] {
+  if (lines.length >= target) return lines.slice(0, target);
+  const suffixPools: Record<string, string[]> = {
+    "Academese": [
+      "as demonstrated in the foregoing analysis",
+      "under prevailing methodological constraints",
+      "per our pre-registered analytic plan",
+      "subject to the caveats herein articulated",
+      "within the limits of external validity",
+      "as an avenue for future inquiry",
+      "as the data generating process suggests",
+      "conditional on identification assumptions",
+      "with implications for theory building",
+      "consistent with robustness checks"
+    ],
+    "Corporate Speak": [
+      "to drive stakeholder alignment",
+      "as part of our go-to-market motion",
+      "to unlock compounding leverage",
+      "with clear ownership and accountability",
+      "to derisk and validate hypotheses",
+      "as we operationalize learnings",
+      "to scale the operating cadence",
+      "with crisp success criteria",
+      "to accelerate time-to-value",
+      "as we manage the change narrative"
+    ],
+    "Fedspeak": [
+      "consistent with our data-dependent approach",
+      "as appropriate to sustain the expansion",
+      "contingent on the evolving outlook",
+      "subject to incoming information",
+      "to restore price stability over time",
+      "within our risk-management framework",
+      "as balance sheet normalization proceeds",
+      "consistent with our dual mandate",
+      "as conditions warrant a recalibration",
+      "with due regard to financial stability"
+    ],
+    "Gibberish": [
+      "flizzle wump drang snizzlepop",
+      "krangle snoot wazz flip",
+      "plim zoodlebrap tronk",
+      "frab snizzlewink plorp",
+      "wazzle dink sproing",
+      "blip blorp snarfle",
+      "drim zazzlefrap quonk",
+      "snizzle cronk womp",
+      "narf zibber flom",
+      "splink zoodle sprong"
+    ],
+    "Lorum Ipsum": [
+      "Integer posuere erat a ante",
+      "Aliquam euismod libero sed ante dapibus",
+      "Maecenas faucibus mollis interdum",
+      "Cras justo odio dapibus ac facilisis in",
+      "Donec id elit non mi porta gravida",
+      "Vivamus sagittis lacus vel augue laoreet",
+      "Morbi leo risus porta ac consectetur ac",
+      "Nulla vitae elit libero a pharetra augue",
+      "Aenean lacinia bibendum nulla sed consectetur",
+      "Etiam porta sem malesuada magna mollis euismod"
+    ],
+    "Officialese": [
+      "as set forth in the annex hereto",
+      "pursuant to applicable regulations",
+      "for record-keeping purposes only",
+      "without prejudice to any rights or remedies",
+      "in accordance with established procedures",
+      "subject to verification and audit",
+      "as mandated by controlling authority",
+      "to the fullest extent permitted by law",
+      "effective upon publication of this notice",
+      "notwithstanding the foregoing provisions"
+    ],
+    "Pseudoscience": [
+      "for effortless quantum alignment",
+      "to activate crystalline coherence",
+      "as the biofield entrains to harmony",
+      "to catalyze multi-dimensional clarity",
+      "with zero-point intentionality",
+      "for photonic cellular remembrance",
+      "as chakric vectors synchronize",
+      "to dissolve low-frequency imprints",
+      "for sovereign heart-brain resonance",
+      "as holographic templates stabilize"
+    ],
+    "Psychobabble": [
+      "while honoring your nervous system",
+      "with radical self-compassion",
+      "as you widen your window of tolerance",
+      "by resourcing the part that feels tender",
+      "in a slow, consensual way",
+      "with gentle curiosity and care",
+      "as you renegotiate old contracts",
+      "by tracking your somatic cues",
+      "with permission to take up space",
+      "as you move toward integration"
+    ],
+    "Shakespeare": [
+      "and let thy conscience be thy guide",
+      "that honour might in quiet harbour dwell",
+      "ere Fortune turn her fickle wheel again",
+      "that mercy's light outshine the wrath of kings",
+      "till Time unbind the knotted threads of fate",
+      "and lend thy tongue the courage of thy heart",
+      "wherein our stars do write a kinder end",
+      "lest envy make a canker of thy bloom",
+      "till dawn redeem the bargains made with night",
+      "and set a fairer mirror to thy soul"
+    ],
+    "Technobabble": [
+      "behind a rate-limited API gateway",
+      "with deterministic retries and idempotency keys",
+      "under steady-state SLOs with error budgets",
+      "via horizontally scalable stateless workers",
+      "with observability stitched through the stack",
+      "using schema-first contracts and CI checks",
+      "with memory-safe primitives on the hot path",
+      "through adaptive concurrency controls",
+      "using zero-copy parsing and SIMD kernels",
+      "via incremental rollouts with feature flags"
+    ]
+  };
+  const generic = [
+    "for additional context",
+    "as an implementation detail",
+    "for clarity of exposition",
+    "as observed in practice",
+    "to illustrate the principle",
+    "as corroborated elsewhere",
+    "for completeness",
+    "as a working assumption",
+    "in most deployments",
+    "as a general guideline"
+  ];
+  const pool = suffixPools[lang] || generic;
+  const out = [...lines];
+  let i = 0;
+  while (out.length < target) {
+    const base = lines[i % lines.length];
+    const clean = base.replace(/[\.!?]\s*$/, "");
+    const suffix = pool[(i / lines.length) | 0 % pool.length] || pool[i % pool.length];
+    out.push(`${clean} — ${suffix}.`);
+    i++;
+  }
+  return out;
+}
+
+const CORPORA: Record<string, string[]> = Object.fromEntries(
+  Object.entries(BASE_CORPORA).map(([lang, lines]) => [lang, expandLines(lang, lines, EXPECTED_CORPUS_SIZE)])
+);
+
+validateCorpora();
+
 function tokenize(text: string): string[] {
-  // Basic word tokenizer: split on whitespace and punctuation, keep sentence enders.
+  // Unicode-safe enough for our corpora without requiring regex Unicode properties.
+  // Keeps Latin letters (including accented À-ÿ), digits, sentence enders, hyphens, apostrophes, curly apostrophe, and common dashes.
   return text
-    .replace(/[^A-Za-zÀ-ÿ0-9\.\!\?\-\' ]+/g, " ")
+    .replace(/[^A-Za-zÀ-ÿ0-9\.!?\-\'\u2019\u2010-\u2015 ]+/g, " ")
     .split(/\s+/)
     .filter(Boolean);
 }
 
-function buildMarkov(tokens: string[], order: number): Map<string, string[]> {
+function buildMarkovFromLines(lines: string[], order: number): Map<string, string[]> {
   const map = new Map<string, string[]>();
-  const pad = Array(order).fill("<START>");
-  const seq = [...pad, ...tokens, "<END>"];
-  for (let i = 0; i + order < seq.length; i++) {
-    const key = seq.slice(i, i + order).join("\u0001");
-    const next = seq[i + order];
+  const start = Array(order).fill("<START>");
+  const add = (key: string, next: string) => {
     const arr = map.get(key);
     if (arr) arr.push(next); else map.set(key, [next]);
+  };
+  for (const line of lines) {
+    const tokens = tokenize(line);
+    let state = [...start];
+    for (const tok of tokens) {
+      const key = state.join("\u0001");
+      add(key, tok);
+      state = [...state.slice(1), tok];
+    }
+    // close sentence
+    const key = state.join("\u0001");
+    add(key, "<END>");
   }
   return map;
 }
@@ -280,12 +447,23 @@ function generateSentence(map: Map<string, string[]>, order: number, avgLen: num
   return sentence;
 }
 
+function validateCorpora(): void {
+  // Dev-only warning if sizes drift
+  // @ts-ignore process may not exist in some environments
+  if (typeof process !== "undefined" && process.env && process.env.NODE_ENV === "production") return;
+  for (const [lang, lines] of Object.entries(CORPORA)) {
+    if (lines.length !== EXPECTED_CORPUS_SIZE) {
+      // eslint-disable-next-line no-console
+      console.warn(`CORPORA[${lang}] has ${lines.length} entries (expected ${EXPECTED_CORPUS_SIZE}).`);
+    }
+  }
+}
+
 export function generateText(options: GenerationOptions): string {
   const { language, sentenceLength, complexity, paragraphs } = options;
   const order = Math.max(1, Math.min(5, Math.round(complexity)));
   const corpus = CORPORA[language] || CORPORA["Lorum Ipsum"];
-  const tokens = tokenize(corpus.join(" "));
-  const map = buildMarkov(tokens, order);
+  const map = buildMarkovFromLines(corpus, order);
 
   const paras: string[] = [];
   for (let p = 0; p < paragraphs; p++) {
