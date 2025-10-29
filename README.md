@@ -1,73 +1,122 @@
-# React + TypeScript + Vite
+# Placeholder Text Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fast, fully client‑side web app that generates realistic placeholder text in multiple styles (Academese, Corporate Speak, Fedspeak, Gibberish, Lorem Ipsum, Officialese, Pseudoscience, Psychobabble, Shakespeare, Technobabble).
 
-Currently, two official plugins are available:
+Built with React + TypeScript + Vite and Material UI. No servers, no external APIs — everything runs in the browser.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Features
+- Multiple “languages”/styles of placeholder text
+- Adjustable parameters: sentence length, complexity, and number of paragraphs
+- Copy‑to‑clipboard
+- Light/Dark mode (follows system preference; toggle in the UI)
+- Preferences persisted locally via `localStorage`
+- SPA routing with 404 fallback for GitHub Pages
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+For detailed scope and requirements, see `.docs/PRD.md`.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
+- React 19 + TypeScript
+- Vite 7
+- Material UI 7
+- Vitest + React Testing Library (for unit/UI testing)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Getting Started (Local Development)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Prerequisites:
+- Node.js 18+ recommended
+- pnpm (preferred) or npm
+
+Install dependencies:
+```bash
+pnpm install
+# or
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Run the dev server:
+```bash
+pnpm dev
+# or
+npm run dev
 ```
+
+Build for production:
+```bash
+pnpm build
+# or
+npm run build
+```
+
+Preview the production build locally:
+```bash
+pnpm preview
+# or
+npm run preview
+```
+
+---
+
+## Scripts
+- `pnpm dev` — start Vite dev server
+- `pnpm build` — type‑check and build
+- `pnpm preview` — serve the production build locally
+- `pnpm lint` — run ESLint
+
+---
+
+## Deployment
+This project is set up for GitHub Pages deployment.
+
+- The Vite base path is configured in `vite.config.ts`:
+  ```ts
+  base: mode === 'production' ? '/lorum.ipsum/' : '/'
+  ```
+- A `404.html` is included for SPA routing on GitHub Pages.
+- A workflow (see `.github/workflows/deploy-pages.yml`) can build and publish on push to `main`.
+
+Forking or renaming the repo?
+- Update the `base` in `vite.config.ts` to match your repo name, e.g. `'/your-repo/'`.
+- Or set a custom domain and use `'/'` as the production base.
+
+---
+
+## Project Structure
+- `src/` — application source
+  - `components/` — shared UI components (e.g., `AppLayout.tsx` with MUI layout and theme toggle)
+- `public/` — static assets copied as‑is
+- `index.html` — app entry HTML
+- `404.html` — GitHub Pages SPA fallback
+- `.docs/PRD.md` — product requirements
+
+---
+
+## Accessibility & UX
+- Uses MUI components for baseline accessibility
+- Color scheme toggle with clear labels
+- Keyboard‑navigable controls
+
+---
+
+## Roadmap (high‑level)
+- Implement Markov‑chain text generation engine per `.docs/PRD.md`
+- Add corpora for each style and tune generation parameters
+- Provide copy buttons and parameter presets per style
+- Add unit tests for generators and UI controls
+
+---
+
+## Contributing
+Issues and PRs are welcome. Please keep changes small and focused. Before submitting:
+- `pnpm lint` and fix warnings where possible
+- Add or update tests when changing core logic
+
+---
+
+## License
+MIT (unless otherwise specified).
