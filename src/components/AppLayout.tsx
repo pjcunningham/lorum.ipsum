@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import { useMemo, useState } from 'react';
-import { CssBaseline, AppBar, Toolbar, Typography, IconButton, Container, Button, Stack, Link } from '@mui/material';
+import { CssBaseline, AppBar, Toolbar, Typography, IconButton, Container, Stack, Link } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 export default function AppLayout({ children }: PropsWithChildren) {
