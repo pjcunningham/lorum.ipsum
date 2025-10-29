@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import { useMemo, useState } from 'react';
-import { CssBaseline, AppBar, Toolbar, Typography, IconButton, Container } from '@mui/material';
+import { CssBaseline, AppBar, Toolbar, Typography, IconButton, Container, Button, Stack, Link } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 export default function AppLayout({ children }: PropsWithChildren) {
@@ -14,10 +14,14 @@ export default function AppLayout({ children }: PropsWithChildren) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppBar position="sticky">
-        <Toolbar>
+        <Toolbar sx={{ gap: 2 }}>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             Placeholder Text Generator
           </Typography>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Link href="#/" color="inherit" underline="hover">Home</Link>
+            <Link href="#/about" color="inherit" underline="hover">About</Link>
+          </Stack>
           <IconButton color="inherit" aria-label="toggle dark mode" onClick={() => setMode(prev => prev === 'light' ? 'dark' : 'light')}>
             {mode === 'light' ? 'Dark' : 'Light'}
           </IconButton>
