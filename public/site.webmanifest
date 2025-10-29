@@ -1,0 +1,10 @@
+{
+  "name": "Placeholder Text Generator",
+  "short_name": "TextGen",
+  "start_url": "/lorum.ipsum/",
+  "scope": "/lorum.ipsum/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0b0b0b",
+  "description": "Client‑side tool to generate realistic placeholder text in multiple styles (Lorem Ipsum, Corporate Speak, Shakespeare, and more)."
+}
