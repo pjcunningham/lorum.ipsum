@@ -4,6 +4,10 @@ A fast, fully client‑side web app that generates realistic placeholder text in
 
 Built with React + TypeScript + Vite and Material UI. No servers, no external APIs — everything runs in the browser.
 
+<p align="center">
+  <img src=".docs/screenshot.jpg" alt="App screenshot of Placeholder Text Generator" width="900">
+</p>
+
 ---
 
 ## Features
