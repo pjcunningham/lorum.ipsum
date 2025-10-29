@@ -26,12 +26,18 @@ function App() {
   }
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} sx={{ width: '100%' }}>
       <LanguageSelector value={language} onChange={setLanguage} />
       <ParameterPanel params={params} onChange={setParams} />
 
-      <Box>
-        <Button variant="contained" onClick={handleGenerate}>Generate</Button>
+      <Box sx={{ width: '100%' }}>
+        <Button
+          variant="contained"
+          onClick={handleGenerate}
+          sx={{ width: { xs: '100%', sm: 'auto' } }}
+        >
+          Generate
+        </Button>
       </Box>
 
       <OutputArea value={output} />

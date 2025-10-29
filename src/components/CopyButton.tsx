@@ -19,7 +19,12 @@ export default function CopyButton({ text }: Props) {
 
   return (
     <>
-      <Button variant="outlined" onClick={handleCopy} disabled={!text}>
+      <Button
+        variant="outlined"
+        onClick={handleCopy}
+        disabled={!text}
+        sx={{ width: { xs: '100%', sm: 'auto' } }}
+      >
         Copy Text
       </Button>
       <Snackbar

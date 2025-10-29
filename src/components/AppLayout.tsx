@@ -23,7 +23,7 @@ export default function AppLayout({ children }: PropsWithChildren) {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Container sx={{ mt: 3, mb: 6 }}>
+      <Container component="main" maxWidth="sm" sx={{ mt: 3, mb: 6, px: { xs: 1.5, sm: 3 } }}>
         {children}
       </Container>
     </ThemeProvider>

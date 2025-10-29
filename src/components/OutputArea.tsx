@@ -10,10 +10,14 @@ export default function OutputArea({ value }: Props) {
       label="Output"
       value={value}
       multiline
-      minRows={10}
+      minRows={6}
+      maxRows={12}
       fullWidth
       InputProps={{ readOnly: true }}
-      sx={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace' }}
+      sx={{
+        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+        '& .MuiInputBase-inputMultiline': { overflow: 'auto' }
+      }}
     />
   );
 }
